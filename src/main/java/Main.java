@@ -1,9 +1,11 @@
-import com.github.javafaker.Faker;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import com.github.javafaker.Faker;
 
 public class Main {
 
@@ -12,30 +14,20 @@ public class Main {
     public static void main(String[] agrs) throws InterruptedException {
 
 
-        System.setProperty("webdriver.chrome.driver", "C:\\Program Files (x86)\\ChromeWebDriver\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "./chromedriver/chromedriver.exe");
 
-        ThreadFactory threadFactory = new ThreadFactory() {
-            @Override
-            public Thread newThread(Runnable r) {
-                return new Thread(r);
-            }
-        };
+        ScheduledExecutorService threadPoolExecutor = Executors.newScheduledThreadPool(10);
 
-        System.setProperty("java.awt.headless", "true");
+        threadPoolExecutor.scheduleWithFixedDelay(new SneakerRaffleBot(createEmailAdressList()), 0, 1000, TimeUnit.MILLISECONDS);
+        threadPoolExecutor.scheduleWithFixedDelay(new SneakerRaffleBot(createEmailAdressList()), 0, 1000, TimeUnit.MILLISECONDS);
+        // threadPoolExecutor.scheduleWithFixedDelay(new SneakerRaffleBot(createEmailAdressList()),0,1000,TimeUnit.MILLISECONDS);
+        // threadPoolExecutor.scheduleWithFixedDelay(new SneakerRaffleBot(createEmailAdressList()),0,1000,TimeUnit.MILLISECONDS);
+        // threadPoolExecutor.scheduleWithFixedDelay(new SneakerRaffleBot(createEmailAdressList()),0,1000,TimeUnit.MILLISECONDS);
+        // threadPoolExecutor.scheduleWithFixedDelay(new SneakerRaffleBot(createEmailAdressList()),0,1000,TimeUnit.MILLISECONDS);
 
-        ScheduledExecutorService threadPoolExecutor = Executors.newScheduledThreadPool(10, threadFactory);
-
-        threadPoolExecutor.scheduleWithFixedDelay(new SneakerRaffleBot(createEmailAdressList()),0,1000,TimeUnit.MILLISECONDS);
-       // threadPoolExecutor.scheduleWithFixedDelay(new SneakerRaffleBot(createEmailAdressList()),0,1000,TimeUnit.MILLISECONDS);
-       // threadPoolExecutor.scheduleWithFixedDelay(new SneakerRaffleBot(createEmailAdressList()),0,1000,TimeUnit.MILLISECONDS);
-       // threadPoolExecutor.scheduleWithFixedDelay(new SneakerRaffleBot(createEmailAdressList()),0,1000,TimeUnit.MILLISECONDS);
-       // threadPoolExecutor.scheduleWithFixedDelay(new SneakerRaffleBot(createEmailAdressList()),0,1000,TimeUnit.MILLISECONDS);
-       // threadPoolExecutor.scheduleWithFixedDelay(new SneakerRaffleBot(createEmailAdressList()),0,1000,TimeUnit.MILLISECONDS);
-
-        Thread.sleep(20000);
+        Thread.sleep(TimeUnit.SECONDS.toMillis(20));
 
         threadPoolExecutor.shutdown();
-
     }
 
     private static List<String> createEmailAdressList() {
